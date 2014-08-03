@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-#set(CMAKE_CXX_COMPILER clang++)
+set(CMAKE_CXX_COMPILER clang++)
 
 project(test-compiler)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/modules")
@@ -19,6 +19,7 @@ link_directories(
 add_definitions(
     ${LLVM_CFLAGS}
     -fno-rtti
+    -fno-exceptions
 )
 
 include_directories(
@@ -26,7 +27,8 @@ include_directories(
     ${test-compiler_SOURCE_DIR}/include
     ${Boost_INCLUDE_DIRS}
     ${LLVM_INCLUDE_DIRS}
-    ${CLANG_INCLUDE_DIRS}
+    ${CLANG_INCLUDE_DIRS}   
+ 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/c++/v1
 )
 
 
