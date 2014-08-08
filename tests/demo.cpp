@@ -1,19 +1,21 @@
-//#define BOOST_TEST_MODULE demo
-//#include <boost/test/unit_test.hpp>
-
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 int sqr(int x) {
   return x * x;
 }
 
-int main() {}
 
-// BOOST_AUTO_TEST_CASE(FailTest)
-// {
-//     BOOST_CHECK_EQUAL(5, sqr(2));
-// }
+TEST(FirstTest, Call) {
+  EXPECT_TRUE(sqr(1) == 1);
+}  
 
-// BOOST_AUTO_TEST_CASE(PassTest)
-// {
-//     BOOST_CHECK_EQUAL(4, sqr(2));
-// }
+
+int main(int argc, char** argv) {
+  // The following line must be executed to initialize Google Mock
+  // (and Google Test) before running the tests.
+  ::testing::InitGoogleMock(&argc, argv);
+  return RUN_ALL_TESTS();
+}
+
+// otool -L --> ldd
