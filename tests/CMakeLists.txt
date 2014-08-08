@@ -11,4 +11,8 @@ add_dependencies(unittests GMockExternal)
 
 target_link_libraries(unittests
     ${GMOCK_LIBS}
+	${LLVM_LDFLAGS}
+	${CLANG_LIBS}
+	${LLVM_MODULE_LIBS}
+	${LLVM_SYSTEM_LIBS}
 )
