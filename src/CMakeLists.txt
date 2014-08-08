@@ -1,4 +1,6 @@
-add_executable(tc main.cpp) 
+file(GLOB SOURCES *.cpp)
+
+add_executable(tc ${SOURCES}) 
 
 target_link_libraries(tc
 	${CLANG_LIBS}

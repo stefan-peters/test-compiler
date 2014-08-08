@@ -1,13 +1,15 @@
-cmake_minimum_required(VERSION 2.8)
-
-#set(CMAKE_CXX_COMPILER clang++)
-
 option(BUILD_TESTS "Build tests (uses GoogleMock)" ON)
 
-project(test-compiler)
+cmake_minimum_required(VERSION 2.8)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/modules")
+
+project(test-compiler)
  
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++")
+ if(APPLE)
+    set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
+else()
+    set(CMAKE_CXX_FLAGS "-std=c++11")
+endif()
 
 find_package(LLVM REQUIRED)
 find_package(Clang REQUIRED)
@@ -35,10 +37,10 @@ include_directories(
 add_subdirectory(src)
 
 if(BUILD_TESTS)
-    
+
     add_subdirectory(tests)
     enable_testing()
-    add_test(NAME Demo COMMAND demo)
+    add_test(NAME unittests COMMAND unittests)
 
 endif()
 
