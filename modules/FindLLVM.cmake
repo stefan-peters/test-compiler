@@ -10,12 +10,6 @@
 
 find_program(LLVM_CONFIG_EXECUTABLE llvm-config DOC "llvm-config executable")
 
-if (LLVM_CONFIG_EXECUTABLE)
-  message(STATUS "LLVM llvm-config found at: ${LLVM_CONFIG_EXECUTABLE}")
-else (LLVM_CONFIG_EXECUTABLE)
-  message(FATAL_ERROR "Could NOT find LLVM executable")
-endif (LLVM_CONFIG_EXECUTABLE)
-
 execute_process(
   COMMAND ${LLVM_CONFIG_EXECUTABLE} --version
   OUTPUT_VARIABLE LLVM_VERSION
@@ -54,13 +48,14 @@ endif (LLVM_CFLAGS MATCHES "\\-DNDEBUG")
 
 
 find_library(LLVM_MODULE_LIBS LLVM-${LLVM_VERSION_MAJOR}.${LLVM_VERSION_MINOR} ${LLVM_LIBRARY_DIRS})
+
 if (NOT LLVM_MODULE_LIBS)
   execute_process(
     COMMAND ${LLVM_CONFIG_EXECUTABLE} --libs
     OUTPUT_VARIABLE LLVM_MODULE_LIBS
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
-endif (NOT LLVM_MODULE_LIBS)
+endif()
 
 execute_process(
   COMMAND ${LLVM_CONFIG_EXECUTABLE} --ldflags
@@ -68,6 +63,9 @@ execute_process(
   OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 
-if (LLVM_CONFIG_EXECUTABLE)
+if(LLVM_CONFIG_EXECUTABLE)
   set(LLVM_FOUND TRUE)
-endif (LLVM_CONFIG_EXECUTABLE)
+endif()
+
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(LLVM DEFAULT_MSG LLVM_INCLUDE_DIRS LLVM_MODULE_LIBS)
