@@ -1,2 +1,0 @@
-find_package(PythonLibs ${REQUIRED_PYTHON_VERSION} REQUIRED)
-find_package(PythonInterp ${PYTHONLIBS_VERSION_STRING} REQUIRED)

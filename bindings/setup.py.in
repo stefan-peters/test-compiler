@@ -1,6 +1,19 @@
-from distutils.core import setup
+from setuptools import setup
 
-setup(name='tc',
-      version='${PACKAGE_VERSION}',
-      package_dir={ '': '${CMAKE_CURRENT_SOURCE_DIR}' },
-      packages=['tc'])
+
+setup(name='${CMAKE_PROJECT_NAME}',
+      version='${VERSION}',
+      url = 'https://github.com/stefan-peters/test-compiler',
+      author = 'Stefan Peters',
+      package_dir={ '': '${PY_MODULES_FOLDER}' },
+      # data_files=[('${CMAKE_PROJECT_NAME}', ['${CMAKE_CURRENT_SOURCE_DIR}/*.so'])],
+      packages=['${CMAKE_PROJECT_NAME}'],
+      # package_data = {
+      #   	'': ['*.so'],
+   	  # },      
+      # include_package_data=True,
+   	  #zip_safe=False
+      # ext_modules=[
+      # 	Extension("hello", ['hello.cpp'], libraries=["hello"])
+      # ]
+)

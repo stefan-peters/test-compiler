@@ -1,7 +1,13 @@
 set(SETUP_PY_IN "${CMAKE_CURRENT_SOURCE_DIR}/setup.py.in")
 set(SETUP_PY    "${CMAKE_CURRENT_BINARY_DIR}/setup.py")
-set(DEPS        "${CMAKE_CURRENT_SOURCE_DIR}/tc/__init__.py")
+
+set(DEPS        "${CMAKE_CURRENT_SOURCE_DIR}/modules/__init__.py")
 set(OUTPUT      "${CMAKE_CURRENT_BINARY_DIR}/build/timestamp")
+
+set(PY_MODULES_FOLDER "py-module")
+set(PY_MODULES_PATH "${CMAKE_CURRENT_BINARY_DIR}/${PY_MODULES_FOLDER}")
+set(PY_MODULE_PATH "${PY_MODULES_PATH}/${CMAKE_PROJECT_NAME}")
+
 
 configure_file(${SETUP_PY_IN} ${SETUP_PY})
 
@@ -10,9 +16,20 @@ add_custom_command(OUTPUT ${OUTPUT}
                    COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
                    DEPENDS ${DEPS})
 
-add_custom_target(target ALL DEPENDS ${OUTPUT})
+
+add_custom_target(copy_py_modules
+	COMMAND ${CMAKE_COMMAND} -E make_directory ${PY_MODULE_PATH}
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/modules/. ${PY_MODULE_PATH}
+)
+
+
+add_custom_target(target ALL DEPENDS copy_py_modules ${OUTPUT})
 
 install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} ${SETUP_PY} install)")
+
+# install(CODE "execute_process(COMMAND python setup.py install -f
+# --prefix=${CMAKE_INSTALL_PREFIX} WORKING_DIRECTORY
+# ../source/libmoleculizer-1.1.2/python-src/language_parser)")
 
 set(Boost_USE_STATIC_LIBS   ON)
 set(Boost_USE_MULTITHREADED ON)
@@ -23,14 +40,37 @@ find_package(Boost COMPONENTS system thread python REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS} ${PYTHON_LIBRARY_DIRS})
 
-add_library(spam SHARED
-        tc/spam.cpp
-    )
+macro(create_python_module name sources)
+  add_library(${name} SHARED ${sources})
+  target_link_libraries(${name} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
+  set_target_properties(${name} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PY_MODULE_PATH}")
 
-target_link_libraries(spam
-        ${PYTHON_LIBRARIES}
-    )
+  if(APPLE)
+    set_target_properties(${name} PROPERTIES PREFIX "" SUFFIX ".so")
+  endif()
+endmacro()
 
-if(APPLE)
-  set_target_properties(spam PROPERTIES PREFIX "" SUFFIX ".so")
-endif()
+create_python_module(spam extensions/spam.cpp)
+create_python_module(hello extensions/hello.cpp)
+
+
+#
+# TESTS
+#
+
+macro(add_python_test script)
+  GET_FILENAME_COMPONENT(test_name ${script} NAME)
+  add_test(NAME ${test_name}
+        COMMAND ${PYTHON_EXECUTABLE} ${script})
+    set_tests_properties(${test_name}
+    PROPERTIES ENVIRONMENT "PYTHONPATH=${PY_MODULES_PATH}")
+endmacro()
+
+message(${PY_MODULES_PATH})
+
+
+file(GLOB TEST_SOURCES "tests/test_*.py")
+
+foreach(source ${TEST_SOURCES})
+  add_python_test(${source})
+endforeach()

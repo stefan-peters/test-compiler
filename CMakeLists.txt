@@ -1,4 +1,4 @@
-option(BUILD_UNIT_TESTS "Build tests (uses GoogleMock)" ON)
+option(BUILD_TESTS "Build tests" ON)
 option(CMAKE_VERBOSE_MAKEFILE "Build verbose Makefiles" OFF)
 
 set(VERSION "0.1.0")
@@ -9,7 +9,7 @@ set(VERSION "0.1.0")
 cmake_minimum_required(VERSION 3.0)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/modules")
 
-project(test-compiler)
+project(cmc)
  
  if(APPLE)
     set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
@@ -24,32 +24,21 @@ find_package(LLVM REQUIRED)
 find_package(Clang REQUIRED)
 
 set(REQUIRED_PYTHON_VERSION 2.7)
-include(UsePython)
+
+find_package(PythonLibs ${REQUIRED_PYTHON_VERSION} REQUIRED)
+find_package(PythonInterp ${PYTHONLIBS_VERSION_STRING} REQUIRED)
 
 link_directories(
     ${LLVM_LIBRARY_DIRS}
     ${CLANG_LIBRARY_DIRS}
 )
 
-add_definitions(
-    ${LLVM_CFLAGS}
-    -fno-rtti
-    -fno-exceptions
-)
-
-include_directories(
-    ${test-compiler_SOURCE_DIR}/lib/include
-)
-
 #/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/c++/v1
+
+if(BUILD_TESTS)
+    enable_testing()
+endif()
 
 add_subdirectory(lib)
 add_subdirectory(bindings)
-
-if(BUILD_UNIT_TESTS)
-
-    enable_testing()
-    add_subdirectory(tests)
-    
-endif()
 
