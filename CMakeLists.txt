@@ -1,18 +1,30 @@
-option(BUILD_TESTS "Build tests (uses GoogleMock)" ON)
+option(BUILD_UNIT_TESTS "Build tests (uses GoogleMock)" ON)
+option(CMAKE_VERBOSE_MAKEFILE "Build verbose Makefiles" OFF)
 
-cmake_minimum_required(VERSION 2.8)
+set(VERSION "0.1.0")
+
+# http://bloerg.net/2012/11/10/cmake-and-distutils.html
+# https://bitbucket.org/cavallo71/example.cmake.python.module.spam/src
+
+cmake_minimum_required(VERSION 3.0)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/modules")
 
 project(test-compiler)
  
  if(APPLE)
     set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
+    # use the port libs instead of mixing python interpreter,libs and crash at the end
+    set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} /opt/local/lib)
+    cmake_policy(SET CMP0042 NEW) #todo is this correct?
 else()
     set(CMAKE_CXX_FLAGS "-std=c++11")
 endif()
 
 find_package(LLVM REQUIRED)
 find_package(Clang REQUIRED)
+
+set(REQUIRED_PYTHON_VERSION 2.7)
+include(UsePython)
 
 link_directories(
     ${LLVM_LIBRARY_DIRS}
@@ -26,21 +38,21 @@ add_definitions(
 )
 
 include_directories(
-    ${test-compiler_SOURCE_DIR}/src
-    ${test-compiler_SOURCE_DIR}/include
-    ${LLVM_INCLUDE_DIRS}
-    ${CLANG_INCLUDE_DIRS}   
+    ${test-compiler_SOURCE_DIR}/lib/include
 )
 
 #/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/c++/v1
 
-add_subdirectory(src)
+add_subdirectory(lib)
+add_subdirectory(bindings)
 
-if(BUILD_TESTS)
+if(BUILD_UNIT_TESTS)
 
     add_subdirectory(tests)
     enable_testing()
+
     add_test(NAME unittests COMMAND unittests)
+    add_python_test(demo.py)
 
 endif()
 
