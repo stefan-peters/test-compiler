@@ -48,11 +48,8 @@ add_subdirectory(bindings)
 
 if(BUILD_UNIT_TESTS)
 
-    add_subdirectory(tests)
     enable_testing()
-
-    add_test(NAME unittests COMMAND unittests)
-    add_python_test(demo.py)
-
+    add_subdirectory(tests)
+    
 endif()
 
