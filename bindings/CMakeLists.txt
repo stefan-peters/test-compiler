@@ -58,19 +58,23 @@ create_python_module(hello extensions/hello.cpp)
 # TESTS
 #
 
-macro(add_python_test script)
-  GET_FILENAME_COMPONENT(test_name ${script} NAME)
-  add_test(NAME ${test_name}
-        COMMAND ${PYTHON_EXECUTABLE} ${script})
-    set_tests_properties(${test_name}
-    PROPERTIES ENVIRONMENT "PYTHONPATH=${PY_MODULES_PATH}")
-endmacro()
+if(BUILD_TESTS)
 
-message(${PY_MODULES_PATH})
+  macro(add_python_test script)
+    GET_FILENAME_COMPONENT(test_name ${script} NAME)
+    add_test(NAME ${test_name}
+          COMMAND ${PYTHON_EXECUTABLE} ${script})
+      set_tests_properties(${test_name}
+      PROPERTIES ENVIRONMENT "PYTHONPATH=${PY_MODULES_PATH}")
+  endmacro()
+
+  message(${PY_MODULES_PATH})
 
 
-file(GLOB TEST_SOURCES "tests/test_*.py")
+  file(GLOB TEST_SOURCES "tests/test_*.py")
 
-foreach(source ${TEST_SOURCES})
-  add_python_test(${source})
-endforeach()
+  foreach(source ${TEST_SOURCES})
+    add_python_test(${source})
+  endforeach()
+
+endif()

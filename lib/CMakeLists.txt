@@ -33,24 +33,27 @@ set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
 # TESTS
 #
 
-include(UseGoogleMock)
+if(BUILD_TESTS)
+	
+	include(UseGoogleMock)
 
-include_directories(${GMOCK_INCLUDE_DIRS})
-link_directories(${GMOCK_LIBRARY_DIRS})
+	include_directories(${GMOCK_INCLUDE_DIRS})
+	link_directories(${GMOCK_LIBRARY_DIRS})
 
-macro(add_gmock_test source)
+	macro(add_gmock_test source)
 
-  	GET_FILENAME_COMPONENT(test_name ${source} NAME)
-  	add_executable(${test_name} ${source} "tests/main.cpp")
-	add_dependencies(${test_name} GMockExternal)
+	  	GET_FILENAME_COMPONENT(test_name ${source} NAME)
+	  	add_executable(${test_name} ${source} "tests/main.cpp")
+		add_dependencies(${test_name} GMockExternal)
 
-	target_link_libraries(${test_name} ${GMOCK_LIBS})
-  	add_test(NAME ${test_name} COMMAND ${test_name})
-endmacro()
+		target_link_libraries(${test_name} ${GMOCK_LIBS})
+	  	add_test(NAME ${test_name} COMMAND ${test_name})
+	endmacro()
 
 
-file(GLOB TEST_SOURCES "tests/test_*.cpp")
+	file(GLOB TEST_SOURCES "tests/test_*.cpp")
 
-foreach(source ${TEST_SOURCES})
-  add_gmock_test(${source})
-endforeach()
+	foreach(source ${TEST_SOURCES})
+		add_gmock_test(${source})
+	endforeach()
+endif()
