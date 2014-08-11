@@ -34,3 +34,7 @@ bool parseFile(const char* path) {
 bool parseCode(const char* code) {
   return runToolOnCode(new clang::SyntaxOnlyAction, code);
 }
+
+const char* xgreet() {
+	return "hello, world";
+}

@@ -1,6 +1,8 @@
+#include <demo.h>
+
 char const* greet()
 {
-   return "hello, world";
+   return xgreet();
 }
 
 #include <boost/python.hpp>

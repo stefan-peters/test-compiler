@@ -8,7 +8,6 @@ add_definitions(
 
 include_directories (
 	"src"
-	"include"
     ${LLVM_INCLUDE_DIRS}
     ${CLANG_INCLUDE_DIRS}
 )
@@ -44,9 +43,9 @@ if(BUILD_TESTS)
 
 	  	GET_FILENAME_COMPONENT(test_name ${source} NAME)
 	  	add_executable(${test_name} ${source} "tests/main.cpp")
-		add_dependencies(${test_name} GMockExternal)
+		add_dependencies(${test_name} GMockExternal ${CMAKE_PROJECT_NAME})
 
-		target_link_libraries(${test_name} ${GMOCK_LIBS})
+		target_link_libraries(${test_name} ${GMOCK_LIBS} ${CMAKE_PROJECT_NAME})
 	  	add_test(NAME ${test_name} COMMAND ${test_name})
 	endmacro()
 

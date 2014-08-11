@@ -42,8 +42,9 @@ link_directories(${Boost_LIBRARY_DIRS} ${PYTHON_LIBRARY_DIRS})
 
 macro(create_python_module name sources)
   add_library(${name} SHARED ${sources})
-  target_link_libraries(${name} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
+  target_link_libraries(${name} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${CMAKE_PROJECT_NAME})
   set_target_properties(${name} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PY_MODULE_PATH}")
+  add_dependencies(${name} ${CMAKE_PROJECT_NAME})
 
   if(APPLE)
     set_target_properties(${name} PROPERTIES PREFIX "" SUFFIX ".so")
@@ -61,7 +62,7 @@ create_python_module(hello extensions/hello.cpp)
 if(BUILD_TESTS)
 
   macro(add_python_test script)
-    GET_FILENAME_COMPONENT(test_name ${script} NAME)
+    get_filename_component(test_name ${script} NAME)
     add_test(NAME ${test_name}
           COMMAND ${PYTHON_EXECUTABLE} ${script})
       set_tests_properties(${test_name}

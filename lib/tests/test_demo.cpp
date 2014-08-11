@@ -9,7 +9,7 @@ int sqr(int x) {
 
 
 TEST(FirstTest, Call) {
-  EXPECT_TRUE(sqr(1) == 1);
+  ASSERT_STREQ(xgreet(), "hello, world");
 }  
 
 

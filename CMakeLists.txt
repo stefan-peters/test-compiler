@@ -33,6 +33,10 @@ link_directories(
     ${CLANG_LIBRARY_DIRS}
 )
 
+include_directories(
+	"lib/include"
+)
+
 #/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/c++/v1
 
 if(BUILD_TESTS)
