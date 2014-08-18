@@ -17,6 +17,10 @@ namespace cmc {
             return name == other.name and values == other.values;
         }
     };
+
+	bool operator<(const Enum::Value& lhs, const Enum::Value& rhs) {
+		return std::get<1>(lhs) < std::get<1>(rhs);
+    }
 }
 
 

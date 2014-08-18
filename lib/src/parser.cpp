@@ -16,6 +16,7 @@ using namespace llvm;
 using namespace clang;
 
 #include <cmc/parser.h>
+#include <algorithm>
 
 // // Apply a custom category to all command-line options so that they are the
 // // only ones displayed.
@@ -104,7 +105,10 @@ namespace cmc {
 std::list<cmc::Enum> parseCode(const std::string &code,
                                const std::vector<std::string> &args) {
   values.clear();
+  
   runToolOnCodeWithArgs(new FindNamedClassAction, code, args);
+  std::sort(values.back().values.begin(), values.back().values.end(), std::greater<cmc::Enum::Value>());
+
   return values;
 }
 }
