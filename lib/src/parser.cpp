@@ -9,7 +9,7 @@
 #include <clang/AST/ASTContext.h>
 
 // Declares llvm::cl::extrahelp.
-#include "llvm/Support/CommandLine.h"
+#include "llvm/Support/CommandLine.h" 
 
 using namespace clang::tooling;
 using namespace llvm;
@@ -37,7 +37,7 @@ using namespace clang;
 // return Tool.run(newFrontendActionFactory<clang::SyntaxOnlyAction>().get());
 
 std::list<cmc::Enum> values;
-
+ 
 class FindNamedClassVisitor
     : public RecursiveASTVisitor<FindNamedClassVisitor> {
 public:
@@ -46,23 +46,36 @@ public:
   bool VisitEnumDecl(EnumDecl *ED) {
 
     auto ed = ED->getDefinition();
-    if(ed) {
+
+    if (ed) {
       cmc::Enum e;
-      e.name = ed->getName();
+
+      if(ed->getTypedefNameForAnonDecl()) {
+        e.name = ed->getTypedefNameForAnonDecl()->getName();
+      }
+      else {
+        e.name = ed->getName();
+      }
       values.push_back(e);
     }
     return true;
   }
 
-  bool VisitEnumConstantDecl (EnumConstantDecl *ECD) {
-    auto v = std::make_tuple<std::string, int>(ECD->getName(), ECD->getInitVal().getSExtValue());
+  bool VisitEnumConstantDecl(EnumConstantDecl *ECD) {
+    auto v = std::make_tuple<std::string, int>( 
+        ECD->getName(), ECD->getInitVal().getSExtValue());
     values.back().values.push_back(v);
+    return true;
+  }
+
+  bool VisitTypedefNameDecl(TypedefNameDecl *TND) {
     return true;
   }
 
 private:
   ASTContext *Context;
 };
+
 
 class FindNamedClassConsumer : public clang::ASTConsumer {
 public:
@@ -76,6 +89,7 @@ private:
   FindNamedClassVisitor Visitor;
 };
 
+
 class FindNamedClassAction : public clang::ASTFrontendAction {
 public:
   virtual clang::ASTConsumer *
@@ -84,11 +98,13 @@ public:
   }
 };
 
+
 namespace cmc {
 
-std::list<cmc::Enum> parseCode(const char *code) {
+std::list<cmc::Enum> parseCode(const std::string &code,
+                               const std::vector<std::string> &args) {
   values.clear();
-  runToolOnCode(new FindNamedClassAction, code);
+  runToolOnCodeWithArgs(new FindNamedClassAction, code, args);
   return values;
 }
 }

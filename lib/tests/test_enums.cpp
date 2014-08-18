@@ -5,9 +5,14 @@
 #include <cmc/parser.h>
 
 namespace cmc {
-	void PrintTo(const Enum& e, ::std::ostream* os) {
- 	 	*os << "Enum(" << e.name << ") {}";
-	}
+void PrintTo(const Enum &e, ::std::ostream *os) {
+  *os << "Enum(" << e.name << ") { ";
+  for(auto value : e.values) {
+  	*os << std::get<0>(value) << ":" << std::get<1>(value) << " ";
+  }
+  *os << "}";
+}
+
 }
 
 std::list<cmc::Enum> colorEnum() {
@@ -32,8 +37,10 @@ TEST(EnumTests, TypedefEnum) {
 }
 
 TEST(EnumTests, ClassEnum) {
+  std::vector<std::string> args;
+  args.push_back("--std=c++11");
   ASSERT_EQ(colorEnum(),
-            cmc::parseCode("enum class Color {Red, Green, Blue};"));
+            cmc::parseCode("enum class Color {Red, Green, Blue};", args));
 }
 
 // otool -L --> ldd
