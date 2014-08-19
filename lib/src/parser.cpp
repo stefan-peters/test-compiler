@@ -51,11 +51,13 @@ public:
     if (ed) {
       cmc::Enum e;
 
+      llvm::outs()<< ED->getParent();
+
       if(ed->getTypedefNameForAnonDecl()) {
-        e.name = ed->getTypedefNameForAnonDecl()->getName();
+        e.name = ed->getTypedefNameForAnonDecl()->getQualifiedNameAsString();
       }
-      else {
-        e.name = ed->getName();
+      else if (not ed->getName().empty()) {
+        e.name = ed->getQualifiedNameAsString();
       }
       values.push_back(e);
     }

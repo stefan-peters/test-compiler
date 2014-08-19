@@ -9,6 +9,9 @@
 namespace cmc {
 
     struct Enum {
+
+    	Enum(const std::string& name_ = std::string()) : name(name_) {}
+
         typedef std::tuple<std::string, int> Value;
         std::vector<Value> values;
         std::string name;
