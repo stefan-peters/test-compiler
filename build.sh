@@ -2,7 +2,9 @@
 
 BUILD_DIR="b"
 
-export PATH="/opt/local/bin/:$PATH"
+if [[ -e "env.sh" ]]; then
+	. env.sh
+fi
 
 if [[ ! -e "$BUILD_DIR" ]]; then
 	mkdir "$BUILD_DIR";
@@ -12,6 +14,5 @@ if [[ ! -e "$BUILD_DIR" ]]; then
 fi;
 
 cd "$BUILD_DIR";
-make
+make && ./lib/test_enums.cpp
 #ctest --verbose
-./lib/test_enums.cpp

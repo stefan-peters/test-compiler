@@ -6,7 +6,7 @@ set(VERSION "0.1.0")
 # http://bloerg.net/2012/11/10/cmake-and-distutils.html
 # https://bitbucket.org/cavallo71/example.cmake.python.module.spam/src
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 2.8)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/modules")
 
 project(cmc)

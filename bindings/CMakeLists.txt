@@ -31,9 +31,15 @@ install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} ${SETUP_PY} install)"
 # --prefix=${CMAKE_INSTALL_PREFIX} WORKING_DIRECTORY
 # ../source/libmoleculizer-1.1.2/python-src/language_parser)")
 
-set(Boost_USE_STATIC_LIBS   ON)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME ON)
+if(APPLE)
+  set(Boost_USE_STATIC_LIBS   ON)
+  set(Boost_USE_MULTITHREADED ON)
+  set(Boost_USE_STATIC_RUNTIME ON)
+else()
+  set(Boost_USE_STATIC_LIBS   OFF)
+  set(Boost_USE_MULTITHREADED ON)
+  set(Boost_USE_STATIC_RUNTIME OFF)
+endif()
 
 find_package(Boost COMPONENTS system thread python REQUIRED)
 
