@@ -19,5 +19,7 @@ import coverage.hello
 # 		print(e.name)
 
 def test_me():
-	print 'xxx'
-	assert True
+	
+ 	e = coverage.hello.Entity()
+ 	e.name = "hallo"
+	assert e.name == 'hallo'

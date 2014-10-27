@@ -87,3 +87,22 @@ namespace coverage {
     return code;
   }
 }
+
+// while( (cond) ? ++[X], true : ++[X], false)
+// if 
+// else
+// for(;;)
+// for(e:c)
+// do while
+// break
+// continue
+// goto
+// label
+// return 
+// compound statement
+// :?
+// throw
+// catch 
+// switch 
+// case 
+// default
