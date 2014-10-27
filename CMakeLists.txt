@@ -9,7 +9,7 @@ set(VERSION "0.1.0")
 cmake_minimum_required(VERSION 2.8)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/modules")
 
-project(cmc)
+project(coverage)
  
  if(APPLE)
     set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
