@@ -1,4 +1,4 @@
-import coverage.annotate
+import coverage
 
 code = """
 int main() {
@@ -13,5 +13,5 @@ int main() {
 
 def test_me():
 
-	coverage.annotate.annotate(code)
+	coverage.annotate(code)
 	assert True

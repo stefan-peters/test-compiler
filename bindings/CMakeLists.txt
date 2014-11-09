@@ -8,7 +8,6 @@ set(PY_MODULES_FOLDER "py-module")
 set(PY_MODULES_PATH "${CMAKE_CURRENT_BINARY_DIR}/${PY_MODULES_FOLDER}")
 set(PY_MODULE_PATH "${PY_MODULES_PATH}/${CMAKE_PROJECT_NAME}")
 
-
 configure_file(${SETUP_PY_IN} ${SETUP_PY})
 
 add_custom_command(OUTPUT ${OUTPUT}
@@ -47,18 +46,19 @@ include_directories(${Boost_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS} ${PYTHON_LIBRARY_DIRS})
 
 macro(create_python_module name sources)
-  add_library(${name} SHARED ${sources})
-  target_link_libraries(${name} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${CMAKE_PROJECT_NAME})
-  set_target_properties(${name} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PY_MODULE_PATH}")
-  add_dependencies(${name} ${CMAKE_PROJECT_NAME})
+  set(ext_name ${name})
+  add_library(${ext_name} SHARED ${sources})
+  target_link_libraries(${ext_name} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${CMAKE_PROJECT_NAME})
+  set_target_properties(${ext_name} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PY_MODULE_PATH}")
+  add_dependencies(${ext_name} ${CMAKE_PROJECT_NAME})
 
   if(APPLE)
-    set_target_properties(${name} PROPERTIES PREFIX "" SUFFIX ".so")
+    set_target_properties(${ext_name} PROPERTIES PREFIX "" SUFFIX ".so")
   endif()
 endmacro()
 
-create_python_module(spam extensions/spam.cpp)
-create_python_module(annotate extensions/annotate.cpp)
+
+create_python_module(_annotate extensions/_annotate.cpp)
 
 
 #
