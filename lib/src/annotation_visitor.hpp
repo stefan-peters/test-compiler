@@ -4,12 +4,16 @@
 #include <clang/AST/RecursiveASTVisitor.h>
 #include <clang/AST/ASTContext.h>
 
-class AnnotationVisitor : public clang::RecursiveASTVisitor<AnnotationVisitor> {
+using namespace clang;
+
+class AnnotationVisitor : public RecursiveASTVisitor<AnnotationVisitor> {
  public:
-  explicit AnnotationVisitor(clang::ASTContext* context) : context_(context) {}
+  explicit AnnotationVisitor(ASTContext* context) : context_(context) {}
+
+  bool VisitIfStmt(IfStmt* stmt);
 
  private:
-  clang::ASTContext* context_;
+  ASTContext* context_;
 };
 
 #endif
