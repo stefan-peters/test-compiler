@@ -17,8 +17,7 @@ AnnotationList annotate_with_parameter(const std::string code, list& l) {
   // }
 
   return annotate(code, ParameterList(stl_input_iterator<std::string>(l),
-                                      stl_input_iterator<std::string>())
-                                      );
+                                      stl_input_iterator<std::string>()));
 }
 
 AnnotationList annotate_without_parameter(const std::string code) {

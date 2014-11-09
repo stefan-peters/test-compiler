@@ -4,15 +4,11 @@
 #include <string>
 #include <vector>
 
+#include <coverage/annotation.hpp>
+
 namespace coverage {
 
-struct Annotation {
-  std::string name;
-};
-
-typedef std::vector<Annotation> AnnotationList;
 typedef std::vector<std::string> ParameterList;
-
 
 AnnotationList annotate(const std::string& code,
                         const ParameterList& parameter = ParameterList());

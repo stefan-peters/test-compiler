@@ -15,13 +15,15 @@ int main() {
 }
 """
 
+
 def test_simple():
 
-	coverage.annotate(code)
-	assert True
+	res = coverage.annotate(code)
+	assert len(res) == 1
+	assert res[0].name == 'if'
+
 
 def test_with_parameter():
 
 	res = coverage.annotate(code, ['-DDISABLE_BRANCH'])
-	assert len(res) == 1
-	assert res[0].name == 'if'
+	assert len(res) == 0
