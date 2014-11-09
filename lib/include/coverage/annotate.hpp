@@ -5,8 +5,17 @@
 #include <vector>
 
 namespace coverage {
+
+struct Annotation {
+  std::string name;
+};
+
+typedef std::vector<Annotation> AnnotationList;
 typedef std::vector<std::string> ParameterList;
-std::string annotate(const std::string& code);
+
+
+AnnotationList annotate(const std::string& code,
+                        const ParameterList& parameter = ParameterList());
 }
 
 #endif

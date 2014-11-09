@@ -4,9 +4,15 @@
 
 namespace coverage {
 
-std::string annotate(const std::string &code) {
-  clang::tooling::runToolOnCodeWithArgs(new AnnotationAction, code,
-                                        ParameterList());
-  return code;
+AnnotationList annotate(const std::string& code,
+                        const ParameterList& parameter) {
+  clang::tooling::runToolOnCodeWithArgs(new AnnotationAction, code, parameter);
+
+  AnnotationList list;
+  Annotation ano;
+  ano.name = "if";
+  list.push_back(ano);
+
+  return list;
 }
 }
