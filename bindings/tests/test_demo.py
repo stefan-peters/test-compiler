@@ -1,25 +1,17 @@
-import coverage.spam
-import coverage.hello
+import coverage.annotate
 
-# #cmc.spam.system("ls -la")
-
-# import unittest
-
-# class TestSequenceFunctions(unittest.TestCase):
-# 	def test_me(self):
-# 		self.assertEqual(coverage.hello.greet(), "hello, world")
-
-# 	def test_mt(self):
-# 		#self.assertFalse(cmc.hello.parse_string("invalid source code"))
-# 		self.assertTrue(coverage.hello.parse_string("class ValidSourceCode {};"))
-
-# 	def test_e(self):
-# 		e = coverage.hello.Entity()
-# 		e.name = "hallo"
-# 		print(e.name)
+code = """
+int main() {
+	if(true) {
+		return 1;
+	}
+	else {
+		return 2;
+	}
+}
+"""
 
 def test_me():
-	
- 	e = coverage.hello.Entity()
- 	e.name = "hallo"
-	assert e.name == 'hallo'
+
+	coverage.annotate.annotate(code)
+	assert True

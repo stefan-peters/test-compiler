@@ -58,7 +58,7 @@ macro(create_python_module name sources)
 endmacro()
 
 create_python_module(spam extensions/spam.cpp)
-create_python_module(hello extensions/hello.cpp)
+create_python_module(annotate extensions/annotate.cpp)
 
 
 #
@@ -66,9 +66,9 @@ create_python_module(hello extensions/hello.cpp)
 #
 
 if(BUILD_TESTS)
- 
+
   get_filename_component(abs_tests "tests" ABSOLUTE)
   add_test(NAME bindings_test COMMAND ${PYTHON_EXECUTABLE} -m pytest -v ${abs_tests})
-  set_tests_properties(bindings_test PROPERTIES ENVIRONMENT "PYTHONPATH=${PY_MODULES_PATH}")  
+  set_tests_properties(bindings_test PROPERTIES ENVIRONMENT "PYTHONPATH=${PY_MODULES_PATH}")
 
 endif()
