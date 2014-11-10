@@ -12,7 +12,7 @@ using namespace coverage;
 class AnnotationConsumer : public clang::ASTConsumer {
  public:
   explicit AnnotationConsumer(clang::ASTContext *context,
-                              AnnotationList &annotations_)
+                              Annotations *annotations_)
       : visitor_(context, annotations_) {}
 
   virtual void HandleTranslationUnit(clang::ASTContext &Context) {

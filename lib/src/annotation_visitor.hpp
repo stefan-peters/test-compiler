@@ -12,14 +12,14 @@ using namespace coverage;
 class AnnotationVisitor : public RecursiveASTVisitor<AnnotationVisitor> {
  public:
   explicit AnnotationVisitor(ASTContext* context,
-                             coverage::AnnotationList& annotations)
+                             coverage::Annotations* annotations)
       : context_(context), annotations_(annotations) {}
 
   bool VisitIfStmt(IfStmt* stmt);
 
  private:
   ASTContext* context_;
-  AnnotationList& annotations_;
+  Annotations* annotations_;
 };
 
 #endif

@@ -8,10 +8,10 @@
 
 namespace coverage {
 
-typedef std::vector<std::string> ParameterList;
+typedef std::vector<std::string> Parameters;
 
-AnnotationList annotate(const std::string& code,
-                        const ParameterList& parameter = ParameterList());
+Annotations annotate(const std::string& code,
+                     const Parameters& parameter = Parameters());
 }
 
 #endif

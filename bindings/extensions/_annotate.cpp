@@ -7,20 +7,12 @@
 using namespace boost::python;
 using namespace coverage;
 
-AnnotationList annotate_with_parameter(const std::string code, list& l) {
-  ParameterList parameter;
-  // std::copy(stl_input_iterator<std::string>(l),
-  //           stl_input_iterator<std::string>(), parameter.begin());
-
-  // for (int i = 0; i < len(l); ++i) {
-  //   parameter.push_back(extract<std::string>(l[i]));
-  // }
-
-  return annotate(code, ParameterList(stl_input_iterator<std::string>(l),
-                                      stl_input_iterator<std::string>()));
+Annotations annotate_with_parameter(const std::string code, list& l) {
+  return annotate(code, Parameters(stl_input_iterator<std::string>(l),
+                                   stl_input_iterator<std::string>()));
 }
 
-AnnotationList annotate_without_parameter(const std::string code) {
+Annotations annotate_without_parameter(const std::string code) {
   return annotate(code);
 }
 
@@ -28,7 +20,11 @@ template <class T>
 struct VectorToListConverter {
   static PyObject* convert(const std::vector<T>& vec) {
     boost::python::list* l = new boost::python::list();
-    for (size_t i = 0; i < vec.size(); i++) (*l).append(vec[i]);
+
+    
+    for (const T& value : vec) {
+      l->append(value);
+    }
 
     return l->ptr();
   }

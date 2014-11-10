@@ -1,9 +1,7 @@
 #include "annotation_visitor.hpp"
 
 bool AnnotationVisitor::VisitIfStmt(IfStmt* stmt) {
-  Annotation ano;
-  ano.name = "if";
-  annotations_.push_back(ano);
+  annotations_->push_back(Annotation("if"));
 
   llvm::errs() << "MATCH";
   return true;
