@@ -18,6 +18,9 @@ class AnnotationVisitor : public RecursiveASTVisitor<AnnotationVisitor> {
   bool VisitIfStmt(IfStmt* stmt);
 
  private:
+  Position getPosition(const SourceLocation& loc) const;
+  Range getRange(Stmt* smt) const;
+
   ASTContext* context_;
   Annotations* annotations_;
 };

@@ -10,7 +10,7 @@ cmake_minimum_required(VERSION 2.8)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/modules")
 
 project(coverage)
- 
+
  if(APPLE)
     set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
     # use the port libs instead of mixing python interpreter,libs and crash at the end
@@ -45,4 +45,3 @@ endif()
 
 add_subdirectory(lib)
 add_subdirectory(bindings)
-

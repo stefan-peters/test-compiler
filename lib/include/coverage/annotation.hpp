@@ -6,9 +6,20 @@
 
 namespace coverage {
 
+struct Position {
+  int line;
+  int column;
+};
+
+struct Range {
+  Position start;
+  Position end;
+};
+
 struct Annotation {
-  Annotation(const std::string& name_ = "") : name(name_) {}
   std::string name;
+  Range visual;
+  Range marker;
 };
 
 typedef std::vector<Annotation> Annotations;

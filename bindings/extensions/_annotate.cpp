@@ -21,8 +21,7 @@ struct VectorToListConverter {
   static PyObject* convert(const std::vector<T>& vec) {
     boost::python::list* l = new boost::python::list();
 
-    
-    for (const T& value : vec) {
+    for (auto value : vec) {
       l->append(value);
     }
 
@@ -30,8 +29,18 @@ struct VectorToListConverter {
   }
 };
 
+
 BOOST_PYTHON_MODULE(_annotate) {
-  class_<Annotation>("Annotation").def_readonly("name", &Annotation::name);
+  class_<Position>("Position")
+      .def_readonly("line", &Position::line)
+      .def_readonly("column", &Position::column);
+
+  class_<Range>("Range").def_readonly("start", &Range::start).def_readonly(
+      "end", &Range::end);
+
+  class_<Annotation>("Annotation")
+      .def_readonly("name", &Annotation::name)
+      .def_readonly("visual", &Annotation::visual);
 
   to_python_converter<std::vector<Annotation>,
                       VectorToListConverter<Annotation> >();
