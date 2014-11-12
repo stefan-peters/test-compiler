@@ -2,32 +2,52 @@ import coverage
 
 code = """
 int main() {
-#ifndef DISABLE_BRANCH
+#define MY_DEFINE 1 and 2
+extern bool get_result();
+
 	if(true or false) {
 		return 1;
 	}
 	else {
-		return 2;
+		return 0;
 	}
 	if(int i = 0)
+		return 2;
+	if(int i = 0 && true)
+		return 3;
+	if(false ? false : true && true)
 		return 4;
-#else
-	return 3;
-#endif
+	if(MY_DEFINE) {
+		return 5;
+	}
+	if(MY_DEFINE and \
+	1 != 2)
+	  if(MY_DEFINE and (
+			2 != 2))
+			return 7;
+	if((((true))))
+		return 8;
+	if(not get_result()) {
+		return 9;
+	}
 }
 """
 
 
-def dump(text, range):
+def mark(content, r):
+	marker = r
+	line = content[marker.end.line]
+	line = line[:marker.end.column] + "]" + line[marker.end.column:]
+	content[marker.end.line] = line
+
+	line = content[marker.start.line]
+	line = line[:marker.start.column] + "[" + line[marker.start.column:]
+	content[marker.start.line] = line
+
+def dump(text, ranges):
 	content = text.split("\n")
-
-	line = content[range.end.line]
-	line = line[:range.end.column] + "]" + line[range.end.column:]
-	content[range.end.line] = line
-
-	line = content[range.start.line]
-	line = line[:range.start.column] + "[" + line[range.start.column:]
-	content[range.start.line] = line
+	for r in reversed(ranges):
+		mark(content, r)
 
 	return "\n".join(content)
 
@@ -35,13 +55,12 @@ def dump(text, range):
 def test_simple():
 
 	res = coverage.annotate(code)
-	assert len(res) == 2
-	assert res[0].name == 'if'
-	print(dump(code, res[0].visual))
-	print(dump(code, res[1].visual))
+	assert len(res) == 9
+	assert all(r.name == 'if' for r in res)
+	print repr([repr(r) for r in res])
 	assert False
 
+	assert all([r.visual == r.marker for r in res])
 
-def test_with_parameter():
-	res = coverage.annotate(code, ['-DDISABLE_BRANCH'])
-	assert len(res) == 0
+	print(dump(code, [r.visual for r in res]))
+	assert True

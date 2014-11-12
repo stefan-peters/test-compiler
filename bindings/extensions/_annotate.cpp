@@ -29,18 +29,25 @@ struct VectorToListConverter {
   }
 };
 
-
 BOOST_PYTHON_MODULE(_annotate) {
   class_<Position>("Position")
       .def_readonly("line", &Position::line)
-      .def_readonly("column", &Position::column);
+      .def_readonly("column", &Position::column)
+      .def(self_ns::self == self_ns::self)
+      .def(self_ns::repr(self_ns::self));
 
-  class_<Range>("Range").def_readonly("start", &Range::start).def_readonly(
-      "end", &Range::end);
+  class_<Range>("Range")
+      .def_readonly("start", &Range::start)
+      .def_readonly("end", &Range::end)
+      .def(self_ns::self == self_ns::self)
+      .def(self_ns::repr(self_ns::self));
 
   class_<Annotation>("Annotation")
       .def_readonly("name", &Annotation::name)
-      .def_readonly("visual", &Annotation::visual);
+      .def_readonly("visual", &Annotation::visual)
+      .def_readonly("marker", &Annotation::marker)
+      .def(self_ns::self == self_ns::self)
+      .def(self_ns::repr(self_ns::self));
 
   to_python_converter<std::vector<Annotation>,
                       VectorToListConverter<Annotation> >();
