@@ -18,14 +18,16 @@ bool AnnotationVisitor::VisitIfStmt(IfStmt* stmt) {
 }
 
 Position AnnotationVisitor::getPosition(const SourceLocation& loc) const {
-
   Position pos;
+
   pos.line = context_->getSourceManager().getSpellingLineNumber(loc) - 1;
   pos.column = context_->getSourceManager().getSpellingColumnNumber(loc) - 1;
+
   return pos;
 }
 
 Range AnnotationVisitor::getRange(const Stmt* stmt) const {
+  SourceManager& sm = context_->getSourceManager();
 
   SourceLocation start_loc = stmt->getLocStart();
   SourceLocation end_loc = stmt->getLocEnd();
@@ -33,17 +35,16 @@ Range AnnotationVisitor::getRange(const Stmt* stmt) const {
   // macros need a special handling, because we are interessted in the macro
   // instanciation location and not in the macro definition location
   if (start_loc.isMacroID()) {
-    start_loc = context_->getSourceManager()
-                    .getImmediateExpansionRange(start_loc)
-                    .first;
+    assert(start_loc.isMacroID() && "Not a macro expansion loc!");
+    start_loc = sm.getImmediateExpansionRange(start_loc).first;
   }
 
   Range r;
 
-  r.start = getPosition(Lexer::GetBeginningOfToken(
-      start_loc, context_->getSourceManager(), context_->getLangOpts()));
-  r.end = getPosition(Lexer::getLocForEndOfToken(
-      end_loc, 0, context_->getSourceManager(), context_->getLangOpts()));
+  r.start = getPosition(
+      Lexer::GetBeginningOfToken(start_loc, sm, context_->getLangOpts()));
+  r.end = getPosition(
+      Lexer::getLocForEndOfToken(end_loc, 0, sm, context_->getLangOpts()));
 
   return r;
 }
