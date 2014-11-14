@@ -3,6 +3,7 @@
 
 namespace {
 
+
 Position getPosition(const SourceManager& sm, const SourceLocation& loc) {
 
   Position pos;
@@ -28,7 +29,6 @@ Range getRange(const ASTContext* context, const Stmt* stmt) {
       sm, Lexer::GetBeginningOfToken(start_loc, sm, context->getLangOpts()));
   r.end = getPosition(
       sm, Lexer::getLocForEndOfToken(end_loc, 0, sm, context->getLangOpts()));
-
   return r;
 }
 
