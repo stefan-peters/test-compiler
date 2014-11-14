@@ -1,37 +1,23 @@
 import coverage
+import os
+import glob
 
-code = """
-int main() {
-#define MY_DEFINE 1 and 2
-extern bool get_result();
 
-	if(true or false) {
-		return 1;
-	}
-	else {
-		return 0;
-	}
-	if(int i = 0)
-		return 2;
-	if(int i = 0 && true)
-		return 3;
-	if(false ? false : true && true)
-		return 4;
-	if(MY_DEFINE) {
-		return 5;
-	}
-	if(MY_DEFINE and \
-	1 != 2)
-	  if(MY_DEFINE and (
-			2 != 2))
-			return 7;
-	if((((true))))
-		return 8;
-	if(not get_result()) {
-		return 9;
-	}
-}
-"""
+def mark_visual(code):
+
+	content = code.split("\n")
+	for r in reversed(coverage.annotate(code)):
+		mark(content, r.visual)
+
+	return "\n".join(content)
+
+
+def mark_marker(data):
+	content = code.split("\n")
+	for r in reversed(coverage.annotate(code)):
+		mark(content, r.marker)
+
+	return "\n".join(content)
 
 
 def mark(content, r):
@@ -44,25 +30,16 @@ def mark(content, r):
 	line = line[:marker.start.column] + "[" + line[marker.start.column:]
 	content[marker.start.line] = line
 
-def dump(text, ranges):
-	content = text.split("\n")
-	for r in reversed(ranges):
-		mark(content, r)
 
-	return "\n".join(content)
+def sources():
+	path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+	for source in glob.glob("{0}/*.cpp".format(path)):
+		if "expected" not in source:
+			yield source, "{0}.expected.cpp".format("".join(source.split(".")[:-1]))
 
 
-def test_simple():
-
-	res = coverage.annotate(code)
-	assert len(res) == 9
-	assert all(r.name == 'if' for r in res)
-	print repr([repr(r) for r in res])
-
-	for r in res:
-		print(r)
-	assert False
-	#assert all([r.visual == r.marker for r in res])
-
-	print(dump(code, [r.visual for r in res]))
-	assert True
+def test_sources():
+	for src, expected in sources():
+		with open(src, 'r') as fs:
+			with open(expected, 'r') as fe:
+				assert mark_visual(fs.read()) == fe.read()

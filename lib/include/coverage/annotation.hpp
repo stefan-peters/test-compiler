@@ -50,8 +50,8 @@ inline std::ostream& operator<<(std::ostream& stream,
 }
 
 inline bool operator==(const Annotation& lhs, const Annotation& rhs) {
-  return lhs.name == rhs.name and lhs.visual == rhs.visual and lhs.marker ==
-         rhs.marker;
+  return lhs.name == rhs.name and lhs.visual == rhs.visual and
+         lhs.marker == rhs.marker;
 }
 
 typedef std::vector<Annotation> Annotations;
