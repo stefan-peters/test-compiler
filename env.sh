@@ -1,7 +1,8 @@
 
+#$HOME/Development/llvm/install/bin
 #this list of paths works for all MY machines. Adapt if needed
 PATHS="/opt/local/bin
-$HOME/Development/llvm/install/bin
+$HOME/Documents/clang+llvm-3.5.0-macosx-apple-darwin/bin
 /opt/clang-3.5/bin
 /opt/cmake-2.8.12/bin"
 
