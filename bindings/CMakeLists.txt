@@ -70,7 +70,7 @@ create_python_module(_annotate extensions/_annotate.cpp)
 if(BUILD_TESTS)
 
   get_filename_component(abs_tests "tests" ABSOLUTE)
-  add_test(NAME bindings_test COMMAND ${PYTHON_EXECUTABLE} -m pytest -v ${abs_tests})
+  add_test(NAME bindings_test COMMAND ${PYTHON_EXECUTABLE} -B -m pytest -v ${abs_tests})
   set_tests_properties(bindings_test PROPERTIES ENVIRONMENT "PYTHONPATH=${PY_MODULES_PATH}")
 
 endif()

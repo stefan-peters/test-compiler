@@ -58,9 +58,11 @@ def test_simple():
 	assert len(res) == 9
 	assert all(r.name == 'if' for r in res)
 	print repr([repr(r) for r in res])
-	assert False
 
-	assert all([r.visual == r.marker for r in res])
+	for r in res:
+		print(r)
+	assert False
+	#assert all([r.visual == r.marker for r in res])
 
 	print(dump(code, [r.visual for r in res]))
 	assert True

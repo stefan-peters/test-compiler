@@ -1,5 +1,5 @@
-#ifndef ANNOTATION_HPP
-#define ANNOTATION_HPP
+#ifndef COVERAGE_ANNOTATION_HPP
+#define COVERAGE_ANNOTATION_HPP
 
 #include <string>
 #include <vector>
@@ -43,9 +43,9 @@ struct Annotation {
 
 inline std::ostream& operator<<(std::ostream& stream,
                                 const Annotation& annotation) {
-  stream << "coverage::Annotation('" << annotation.name
-         << "' visual: " << annotation.visual
-         << ", marker: " << annotation.marker << ")";
+  stream << "coverage::Annotation('" << annotation.name << "'\n"
+         << "  visual: " << annotation.visual << "\n"
+         << "  marker: " << annotation.marker << "\n)";
   return stream;
 }
 
