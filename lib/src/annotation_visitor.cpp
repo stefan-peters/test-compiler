@@ -1,10 +1,11 @@
 #include "annotation_visitor.hpp"
 #include <clang/Lex/Preprocessor.h>
+#include <type_traits>
 
 namespace {
 
 Position getPosition(const SourceManager& sm, const SourceLocation& loc) {
-  Position pos;
+  auto pos = Position{};
   pos.line = sm.getSpellingLineNumber(loc) - 1;
   pos.column = sm.getSpellingColumnNumber(loc) - 1;
   return pos;
@@ -21,7 +22,7 @@ Range getRange(const ASTContext* context, const Stmt* stmt) {
     start_loc = sm.getImmediateExpansionRange(start_loc).first;
   }
 
-  Range r;
+  auto r = Range{};
 
   r.start = getPosition(
       sm, Lexer::GetBeginningOfToken(start_loc, sm, context->getLangOpts()));
@@ -30,8 +31,20 @@ Range getRange(const ASTContext* context, const Stmt* stmt) {
   return r;
 }
 
+Annotation createBranchAnnotation(const ASTContext* context,
+                                  ConditionalOperator* stmt, const char* name) {
+  auto a = Annotation{name};
+
+  if (stmt->getCond()) {
+    a.visual = getRange(context, stmt->getCond());
+  }
+
+  a.marker = a.visual;
+  return a;
+}
+
 template <class T>
-Annotation createBranchAnnotation(const ASTContext* context, T stmt,
+Annotation createBranchAnnotation(const ASTContext* context, T* stmt,
                                   const char* name) {
   auto a = Annotation{name};
 
@@ -48,36 +61,33 @@ Annotation createBranchAnnotation(const ASTContext* context, T stmt,
 inline bool isInsideMainFile(ASTContext* context, Stmt* stmt) {
   return context->getSourceManager().isInMainFile(stmt->getLocStart());
 }
+
+template <class T>
+bool handleBranchLikeStatement(T* stmt, ASTContext* context,
+                               Annotations* annotations, const char* name) {
+  if (isInsideMainFile(context, stmt)) {
+    auto annotation = createBranchAnnotation(context, stmt, name);
+    if (isValid(annotation)) {
+      annotations->push_back(annotation);
+    }
+  }
+
+  return true;
+}
 }
 
 bool AnnotationVisitor::VisitIfStmt(IfStmt* stmt) {
-  if (isInsideMainFile(context_, stmt)) {
-    auto annotation = createBranchAnnotation(context_, stmt, "if");
-    if (isValid(annotation)) {
-      annotations_->push_back(annotation);
-    }
-  }
-
-  return true;
+  return handleBranchLikeStatement(stmt, context_, annotations_, "if");
 }
 
 bool AnnotationVisitor::VisitForStmt(ForStmt* stmt) {
-  if (isInsideMainFile(context_, stmt)) {
-    auto annotation = createBranchAnnotation(context_, stmt, "for");
-    if (isValid(annotation)) {
-      annotations_->push_back(annotation);
-    }
-  }
-
-  return true;
+  return handleBranchLikeStatement(stmt, context_, annotations_, "for");
 }
 
 bool AnnotationVisitor::VisitWhileStmt(WhileStmt* stmt) {
-  if (isInsideMainFile(context_, stmt)) {
-    auto annotation = createBranchAnnotation(context_, stmt, "while");
-    if (
-      isValid(annotation)) { annotations_->push_back(annotation); }
-  }
+  return handleBranchLikeStatement(stmt, context_, annotations_, "while");
+}
 
-  return true;
+bool AnnotationVisitor::VisitConditionalOperator(ConditionalOperator* op) {
+  return handleBranchLikeStatement(op, context_, annotations_, "conditional");
 }

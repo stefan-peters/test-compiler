@@ -18,8 +18,10 @@ class AnnotationVisitor : public RecursiveASTVisitor<AnnotationVisitor> {
   bool VisitIfStmt(IfStmt* stmt);
   bool VisitForStmt(ForStmt* stmt);
   bool VisitWhileStmt(WhileStmt* stmt);
+  bool VisitConditionalOperator(ConditionalOperator* op);
 
  private:
+
   ASTContext* context_;
   Annotations* annotations_;
 };
