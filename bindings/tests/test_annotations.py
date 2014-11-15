@@ -1,6 +1,7 @@
 import coverage
 import os
 import glob
+import compiler
 from difflib import ndiff
 from functools import partial
 
@@ -8,9 +9,7 @@ from functools import partial
 def mark(code, get):
 
 	content = code.split("\n")
-	for r in reversed(coverage.annotate(code, ["-std=c++11", "-stdlib=libc++",
-	'-I/Users/ghost/Documents/clang+llvm-3.5.0-macosx-apple-darwin//include/c++/v1',
-	'-I/Users/ghost/Documents/clang+llvm-3.5.0-macosx-apple-darwin//lib/clang/3.5.0/include'])):
+	for r in reversed(coverage.annotate(code, compiler.cpp_flags())):
 		marker = get(r)
 		line = content[marker.end.line]
 		line = line[:marker.end.column] + "]" + line[marker.end.column:]
