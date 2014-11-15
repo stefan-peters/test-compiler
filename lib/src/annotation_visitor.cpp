@@ -3,9 +3,7 @@
 
 namespace {
 
-
 Position getPosition(const SourceManager& sm, const SourceLocation& loc) {
-
   Position pos;
   pos.line = sm.getSpellingLineNumber(loc) - 1;
   pos.column = sm.getSpellingColumnNumber(loc) - 1;
@@ -49,7 +47,6 @@ Annotation createBranchAnnotation(const ASTContext* context, T stmt,
 }
 
 bool AnnotationVisitor::VisitIfStmt(IfStmt* stmt) {
-
   auto a = createBranchAnnotation(context_, stmt, "if");
   annotations_->push_back(a);
 

@@ -39,6 +39,7 @@ def run_tests(invoker, name):
 				expected = fe.read()
 				generated = invoker(original)
 				diff = ndiff(expected.split("\n"), generated.split("\n"))
+
 				assert generated == expected, "\n".join(diff)
 
 
