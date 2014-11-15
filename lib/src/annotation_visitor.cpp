@@ -5,10 +5,10 @@
 namespace {
 
 Position getPosition(const SourceManager& sm, const SourceLocation& loc) {
-  auto pos = Position{};
-  pos.line = sm.getSpellingLineNumber(loc) - 1;
-  pos.column = sm.getSpellingColumnNumber(loc) - 1;
-  return pos;
+  auto p = Position{};
+  p.line = sm.getSpellingLineNumber(loc) - 1;
+  p.column = sm.getSpellingColumnNumber(loc) - 1;
+  return p;
 }
 
 Range getRange(const ASTContext* context, const Stmt* stmt) {

@@ -33,7 +33,10 @@ def sources(name):
 
 
 def run_tests(invoker, name):
+	counter = 0
+
 	for orignal_file, expected_file in sources(name):
+		counter += 1
 		with open(orignal_file, 'r') as fs:
 			with open(expected_file, 'r') as fe:
 				original = fs.read()
@@ -42,11 +45,15 @@ def run_tests(invoker, name):
 				diff = ndiff(expected.split("\n"), generated.split("\n"))
 
 				assert generated == expected, "\n".join(diff)
+	return counter
+
+
+total = 4
 
 
 def test_visual_annotation():
-	run_tests(partial(mark, get=lambda x: x.visual), 'visual')
+	assert run_tests(partial(mark, get=lambda x: x.visual), 'visual') == total
 
 
 def test_marker_annotation():
-	run_tests(partial(mark, get=lambda x: x.marker), 'marker')
+	assert run_tests(partial(mark, get=lambda x: x.marker), 'marker') == total

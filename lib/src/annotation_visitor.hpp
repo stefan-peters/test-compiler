@@ -21,7 +21,6 @@ class AnnotationVisitor : public RecursiveASTVisitor<AnnotationVisitor> {
   bool VisitConditionalOperator(ConditionalOperator* op);
 
  private:
-
   ASTContext* context_;
   Annotations* annotations_;
 };
