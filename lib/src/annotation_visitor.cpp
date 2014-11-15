@@ -37,32 +37,47 @@ Annotation createBranchAnnotation(const ASTContext* context, T stmt,
 
   if (stmt->getConditionVariableDeclStmt()) {
     a.visual = getRange(context, stmt->getConditionVariableDeclStmt());
-  } else {
+  } else if (stmt->getCond()) {
     a.visual = getRange(context, stmt->getCond());
   }
 
   a.marker = a.visual;
   return a;
 }
+
+inline bool isInsideMainFile(ASTContext* context, Stmt* stmt) {
+  return context->getSourceManager().isInMainFile(stmt->getLocStart());
+}
 }
 
 bool AnnotationVisitor::VisitIfStmt(IfStmt* stmt) {
-  auto a = createBranchAnnotation(context_, stmt, "if");
-  annotations_->push_back(a);
+  if (isInsideMainFile(context_, stmt)) {
+    auto annotation = createBranchAnnotation(context_, stmt, "if");
+    if (isValid(annotation)) {
+      annotations_->push_back(annotation);
+    }
+  }
 
   return true;
 }
 
 bool AnnotationVisitor::VisitForStmt(ForStmt* stmt) {
-  auto a = createBranchAnnotation(context_, stmt, "for");
-  annotations_->push_back(a);
+  if (isInsideMainFile(context_, stmt)) {
+    auto annotation = createBranchAnnotation(context_, stmt, "for");
+    if (isValid(annotation)) {
+      annotations_->push_back(annotation);
+    }
+  }
 
   return true;
 }
 
 bool AnnotationVisitor::VisitWhileStmt(WhileStmt* stmt) {
-  auto a = createBranchAnnotation(context_, stmt, "while");
-  annotations_->push_back(a);
+  if (isInsideMainFile(context_, stmt)) {
+    auto annotation = createBranchAnnotation(context_, stmt, "while");
+    if (
+      isValid(annotation)) { annotations_->push_back(annotation); }
+  }
 
   return true;
 }

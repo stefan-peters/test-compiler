@@ -1,3 +1,5 @@
+#include <vector>
+
 #define CONDITION true and false
 int get_condition();
 
