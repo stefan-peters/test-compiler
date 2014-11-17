@@ -22,7 +22,7 @@ struct VectorToListConverter {
     boost::python::list* l = new boost::python::list();
 
     for (auto& value : vec) {
-      l->append(value);
+      l->append(value); 
     }
 
     return l->ptr();

@@ -1,7 +1,7 @@
 import coverage
 import os
 import glob
-import compiler
+import coverage.system
 from difflib import ndiff
 from functools import partial
 
@@ -9,7 +9,9 @@ from functools import partial
 def mark(code, get):
 
 	content = code.split("\n")
-	for r in reversed(coverage.annotate(code, compiler.cpp_flags())):
+	includes = ["-I{0}".format(path) for path in coverage.system.system_includes("g++")]
+
+	for r in reversed(coverage.annotate(code, includes)):
 		marker = get(r)
 		line = content[marker.end.line]
 		line = line[:marker.end.column] + "]" + line[marker.end.column:]
@@ -25,7 +27,7 @@ def mark(code, get):
 def sources(name):
 	""" read all sources from the data directory
 		as a pair (source, expected-source)"""
-	path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+	path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data/sources")
 	for source in glob.glob("{0}/*.cpp".format(path)):
 		if "expected" not in source:
 			base = "".join(source.split(".")[:-2])

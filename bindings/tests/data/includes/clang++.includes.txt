@@ -1,0 +1,19 @@
+clang version 3.4 (tags/RELEASE_34/final)
+Target: x86_64-redhat-linux-gnu
+Thread model: posix
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/4.8.3
+Found candidate GCC installation: /usr/lib/gcc/x86_64-redhat-linux/4.8.3
+Selected GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/4.8.3
+ "/usr/bin/clang" -cc1 -triple x86_64-redhat-linux-gnu -fsyntax-only -disable-free -disable-llvm-verifier -main-file-name null -mrelocation-model static -mdisable-fp-elim -fmath-errno -masm-verbose -mconstructor-aliases -munwind-tables -fuse-init-array -target-cpu x86-64 -target-linker-version 2.23.2 -v -resource-dir /usr/bin/../lib/clang/3.4 -internal-isystem /usr/bin/../lib/gcc/x86_64-redhat-linux/4.8.3/../../../../include/c++/4.8.3 -internal-isystem /usr/bin/../lib/gcc/x86_64-redhat-linux/4.8.3/../../../../include/c++/4.8.3/x86_64-redhat-linux -internal-isystem /usr/bin/../lib/gcc/x86_64-redhat-linux/4.8.3/../../../../include/c++/4.8.3/backward -internal-isystem /usr/bin/../lib/gcc/x86_64-redhat-linux/4.8.3/../../../../include/x86_64-redhat-linux/c++/4.8.3 -internal-isystem /usr/local/include -internal-isystem /usr/bin/../lib/clang/3.4/include -internal-externc-isystem /usr/include -internal-externc-isystem /usr/lib/gcc/x86_64-redhat-linux/4.8.2/include -fdeprecated-macro -fdebug-compilation-dir /home/peters/Dropbox/test-compiler/b -ferror-limit 19 -fmessage-length 151 -mstackrealign -fobjc-runtime=gcc -fcxx-exceptions -fexceptions -fdiagnostics-show-option -fcolor-diagnostics -vectorize-slp -x c++ /dev/null
+clang -cc1 version 3.4 based upon LLVM 3.4 default target x86_64-redhat-linux-gnu
+ignoring nonexistent directory "/usr/bin/../lib/gcc/x86_64-redhat-linux/4.8.3/../../../../include/x86_64-redhat-linux/c++/4.8.3"
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.8.2/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/bin/../lib/gcc/x86_64-redhat-linux/4.8.3/../../../../include/c++/4.8.3
+ /usr/bin/../lib/gcc/x86_64-redhat-linux/4.8.3/../../../../include/c++/4.8.3/x86_64-redhat-linux
+ /usr/bin/../lib/gcc/x86_64-redhat-linux/4.8.3/../../../../include/c++/4.8.3/backward
+ /usr/local/include
+ /usr/bin/../lib/clang/3.4/include
+ /usr/include
+End of search list.
