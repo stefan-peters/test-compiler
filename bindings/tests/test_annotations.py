@@ -39,15 +39,15 @@ def source_pair(name, marker):
 	return (path(source_name), path(expected_name))
 
 
-parameter = itertools.product(['visual', 'marker'], [
-	"conditional_branch",
-	"for_branch",
-	"if_branch",
-	"while_branch"
-])
-
-
-@pytest.mark.parametrize("marker, name", parameter)
+@pytest.mark.parametrize("marker, name", itertools.product(
+	['visual', 'marker'], [
+		"conditional_branch",
+		"for_branch",
+		"if_branch",
+		"while_branch"
+		]
+	)
+)
 def test_visual_annotation(marker, name):
 	(orignal_file, expected_file) = source_pair(name, marker)
 
