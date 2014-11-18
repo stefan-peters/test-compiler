@@ -34,7 +34,7 @@ def path(name):
 
 
 def source_pair(name, marker):
-	source_name = "{0}.orignal.cpp".format(name)
+	source_name = "{0}.original.cpp".format(name)
 	expected_name = "{0}.expected.{1}.cpp".format(name, marker)
 	return (path(source_name), path(expected_name))
 
