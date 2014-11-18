@@ -2,16 +2,19 @@ import coverage
 import os
 import glob
 import coverage.system
+import itertools
 from difflib import ndiff
 from functools import partial
+import pytest
 
 
 def mark(code, get):
 
 	content = code.split("\n")
-	includes = ["-I{0}".format(path) for path in coverage.system.system_includes("g++")]
+	includes = coverage.system.system_includes("g++")
+	include_args = ["-I{0}".format(path) for path in includes]
 
-	for r in reversed(coverage.annotate(code, includes)):
+	for r in reversed(coverage.annotate(code, include_args)):
 		marker = get(r)
 		line = content[marker.end.line]
 		line = line[:marker.end.column] + "]" + line[marker.end.column:]
@@ -24,38 +27,34 @@ def mark(code, get):
 	return "\n".join(content)
 
 
-def sources(name):
-	""" read all sources from the data directory
-		as a pair (source, expected-source)"""
-	path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data/sources")
-	for source in glob.glob("{0}/*.cpp".format(path)):
-		if "expected" not in source:
-			base = "".join(source.split(".")[:-2])
-			yield source, "{0}.expected.{1}.cpp".format(base, name)
+def path(name):
+	base_path = os.path.dirname(os.path.abspath(__file__))
+	path = os.path.join(base_path, "data/sources")
+	return os.path.join(path, name)
 
 
-def run_tests(invoker, name):
-	counter = 0
-
-	for orignal_file, expected_file in sources(name):
-		counter += 1
-		with open(orignal_file, 'r') as fs:
-			with open(expected_file, 'r') as fe:
-				original = fs.read()
-				expected = fe.read()
-				generated = invoker(original)
-				diff = ndiff(expected.split("\n"), generated.split("\n"))
-
-				assert generated == expected, "\n".join(diff)
-	return counter
+def source_pair(name, marker):
+	source_name = "{0}.orignal.cpp".format(name)
+	expected_name = "{0}.expected.{1}.cpp".format(name, marker)
+	return (path(source_name), path(expected_name))
 
 
-total = 4
+parameter = itertools.product(['visual', 'marker'], [
+	"conditional_branch",
+	"for_branch",
+	"if_branch",
+	"while_branch"
+])
 
 
-def test_visual_annotation():
-	assert run_tests(partial(mark, get=lambda x: x.visual), 'visual') == total
+@pytest.mark.parametrize("marker, name", parameter)
+def test_visual_annotation(marker, name):
+	(orignal_file, expected_file) = source_pair(name, marker)
 
-
-def test_marker_annotation():
-	assert run_tests(partial(mark, get=lambda x: x.marker), 'marker') == total
+	with open(orignal_file, 'r') as fs:
+		with open(expected_file, 'r') as fe:
+			original = fs.read()
+			expected = fe.read()
+			generated = mark(original, lambda x: getattr(x, marker))
+			diff = ndiff(expected.split("\n"), generated.split("\n"))
+			assert generated == expected, "\n".join(diff)

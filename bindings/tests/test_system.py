@@ -1,6 +1,8 @@
 import coverage.system
 import subprocess
 import os
+import pytest
+
 from mock import patch
 
 
@@ -16,59 +18,36 @@ class PopenProxy(object):
         return (open(path).read(), None)
 
 
-@patch('subprocess.Popen', lambda x, **rest: PopenProxy(x))
-@patch('os.path.exists', lambda x: True)
-@patch('os.path.abspath', lambda x: os.path.normpath(x))
-def test_system_includes_clang_cpp():
-
-    expected = [
+@pytest.mark.parametrize("compiler,includes", [
+    ("clang++", [
         '/usr/include/c++/4.8.3',
         '/usr/include/c++/4.8.3/x86_64-redhat-linux',
         '/usr/include/c++/4.8.3/backward',
         '/usr/local/include',
         '/usr/lib/clang/3.4/include',
         '/usr/include'
-    ]
-    assert coverage.system.system_includes("clang++") == expected
-
-
-@patch('subprocess.Popen', lambda x, **rest: PopenProxy(x))
-@patch('os.path.exists', lambda x: True)
-@patch('os.path.abspath', lambda x: os.path.normpath(x))
-def test_system_includes_g_cpp():
-
-    expected = [
+    ]),
+    ("clang", [
+        '/usr/local/include',
+        '/usr/lib/clang/3.4/include',
+        '/usr/include'
+    ]),
+    ("gcc", [
+        '/usr/lib/gcc/x86_64-redhat-linux/4.8.3/include',
+        '/usr/local/include',
+        '/usr/include'
+    ]),
+    ("g++", [
         '/usr/include/c++/4.8.3',
         '/usr/include/c++/4.8.3/x86_64-redhat-linux',
         '/usr/include/c++/4.8.3/backward',
         '/usr/lib/gcc/x86_64-redhat-linux/4.8.3/include',
         '/usr/local/include',
         '/usr/include'
-    ]
-    assert coverage.system.system_includes("g++") == expected
-
-
+    ]),
+])
 @patch('subprocess.Popen', lambda x, **rest: PopenProxy(x))
 @patch('os.path.exists', lambda x: True)
 @patch('os.path.abspath', lambda x: os.path.normpath(x))
-def test_system_includes_clang_c():
-
-    expected = [
-        '/usr/local/include',
-        '/usr/lib/clang/3.4/include',
-        '/usr/include'
-    ]
-    assert coverage.system.system_includes("clang") == expected
-
-
-@patch('subprocess.Popen', lambda x, **rest: PopenProxy(x))
-@patch('os.path.exists', lambda x: True)
-@patch('os.path.abspath', lambda x: os.path.normpath(x))
-def test_system_includes_gcc():
-
-    expected = [
-        '/usr/lib/gcc/x86_64-redhat-linux/4.8.3/include',
-        '/usr/local/include',
-        '/usr/include'
-    ]
-    assert coverage.system.system_includes("gcc") == expected
+def test_system_includes(compiler, includes):
+    assert coverage.system.system_includes(compiler) == includes
