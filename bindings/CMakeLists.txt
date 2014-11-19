@@ -71,7 +71,7 @@ if(BUILD_TESTS)
 
   add_test(
     NAME bindings_test
-    COMMAND ${PYTHON_EXECUTABLE} -B -m pytest -v .
+    COMMAND ${PYTHON_EXECUTABLE} -B -3 -m pytest -v "."
     WORKING_DIRECTORY "${abs_tests}"
   )
 

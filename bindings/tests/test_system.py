@@ -46,8 +46,9 @@ class PopenProxy(object):
         '/usr/include'
     ]),
 ])
-@patch('subprocess.Popen', lambda x, **rest: PopenProxy(x))
-@patch('os.path.exists', lambda x: True)
-@patch('os.path.abspath', lambda x: os.path.normpath(x))
+
 def test_system_includes(compiler, includes):
-    assert coverage.system.system_includes(compiler) == includes
+    with patch('subprocess.Popen', lambda x, **rest: PopenProxy(x)) as p:
+        with patch('os.path.exists', lambda x: True) as e:
+            with patch('os.path.abspath', lambda x: os.path.normpath(x)) as a:
+                assert coverage.system.system_includes(compiler) == includes
