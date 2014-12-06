@@ -1,19 +1,11 @@
 from setuptools import setup
 
-
 setup(name='${CMAKE_PROJECT_NAME}',
       version='${VERSION}',
       url = 'https://github.com/stefan-peters/test-compiler',
       author = 'Stefan Peters',
       package_dir={ '': '${PY_MODULES_FOLDER}' },
-      # data_files=[('${CMAKE_PROJECT_NAME}', ['${CMAKE_CURRENT_SOURCE_DIR}/*.so'])],
+      scripts=['${PY_MODULE_BIN_DIR}/coverage'],
       packages=['${CMAKE_PROJECT_NAME}'],
-      # package_data = {
-      #   	'': ['*.so'],
-   	  # },      
-      # include_package_data=True,
-   	  #zip_safe=False
-      # ext_modules=[
-      # 	Extension("hello", ['hello.cpp'], libraries=["hello"])
-      # ]
+      package_data = {'coverage': ['_annotate.so']}
 )
