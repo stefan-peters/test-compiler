@@ -1,0 +1,11 @@
+#!/usr/bin/env python2
+
+import sys
+import coverage
+
+def execute(argv):
+  print("execute")
+
+
+if __name__ == '__main__':
+  sys.exit(execute(sys.argv[1:]))

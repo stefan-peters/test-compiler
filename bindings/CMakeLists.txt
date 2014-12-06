@@ -8,6 +8,8 @@ set(PY_MODULES_FOLDER "py-module")
 set(PY_MODULES_PATH "${CMAKE_CURRENT_BINARY_DIR}/${PY_MODULES_FOLDER}")
 set(PY_MODULE_PATH "${PY_MODULES_PATH}/${CMAKE_PROJECT_NAME}")
 
+set(PY_MODULE_BIN_DIR "${CMAKE_CURRENT_SOURCE_DIR}/bin")
+
 configure_file(${SETUP_PY_IN} ${SETUP_PY})
 
 add_custom_command(OUTPUT ${OUTPUT}
@@ -67,8 +69,13 @@ create_python_module(_annotate extensions/_annotate.cpp)
 
 if(BUILD_TESTS)
 
-  get_filename_component(abs_tests "tests" ABSOLUTE)
-  add_test(NAME bindings_test COMMAND ${PYTHON_EXECUTABLE} -B -m pytest -v ${abs_tests})
-  set_tests_properties(bindings_test PROPERTIES ENVIRONMENT "PYTHONPATH=${PY_MODULES_PATH}")
+  get_filename_component(abs_tests "tests/unit" ABSOLUTE)
+  add_test(NAME python_unit_tests COMMAND ${PYTHON_EXECUTABLE} -B -m pytest -v ${abs_tests})
+  set_tests_properties(python_unit_tests PROPERTIES ENVIRONMENT "PYTHONPATH=${PY_MODULES_PATH}")
+
+  get_filename_component(abs_tests "tests/integration" ABSOLUTE)
+  add_test(NAME python_integration_tests COMMAND ${PYTHON_EXECUTABLE} -B -m pytest -v ${abs_tests})
+  set_tests_properties(python_integration_tests PROPERTIES ENVIRONMENT "PYTHONPATH=${PY_MODULES_PATH}")
+  set_tests_properties(python_integration_tests PROPERTIES ENVIRONMENT "PATH=${PY_MODULE_BIN_DIR};$ENV{PATH}")
 
 endif()
