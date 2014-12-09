@@ -7,5 +7,6 @@ setup(name='${CMAKE_PROJECT_NAME}',
       package_dir={ '': '${PY_MODULES_FOLDER}' },
       scripts=['${PY_MODULE_BIN_DIR}/coverage'],
       packages=['${CMAKE_PROJECT_NAME}'],
-      package_data = {'coverage': ['_annotate.so']}
+      package_data = {'coverage': ['_annotate.so']},
+      zip_safe = False
 )

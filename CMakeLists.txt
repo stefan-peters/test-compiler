@@ -23,7 +23,7 @@ endif()
 find_package(LLVM REQUIRED)
 find_package(Clang REQUIRED)
 
-set(REQUIRED_PYTHON_VERSION 2.7)
+set(REQUIRED_PYTHON_VERSION 2.7.8)
 
 find_package(PythonLibs ${REQUIRED_PYTHON_VERSION} REQUIRED)
 find_package(PythonInterp ${PYTHONLIBS_VERSION_STRING} REQUIRED)

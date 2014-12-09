@@ -1,6 +1,9 @@
 set(SETUP_PY_IN "${CMAKE_CURRENT_SOURCE_DIR}/setup.py.in")
 set(SETUP_PY    "${CMAKE_CURRENT_BINARY_DIR}/setup.py")
 
+set(ENV_SH_IN "${CMAKE_CURRENT_SOURCE_DIR}/env.source.sh.in")
+set(ENV_SH "${CMAKE_BINARY_DIR}/env.source.sh")
+
 set(DEPS        "${CMAKE_CURRENT_SOURCE_DIR}/modules/__init__.py")
 set(OUTPUT      "${CMAKE_CURRENT_BINARY_DIR}/build/timestamp")
 
@@ -11,6 +14,7 @@ set(PY_MODULE_PATH "${PY_MODULES_PATH}/${CMAKE_PROJECT_NAME}")
 set(PY_MODULE_BIN_DIR "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 
 configure_file(${SETUP_PY_IN} ${SETUP_PY})
+configure_file(${ENV_SH_IN} ${ENV_SH})
 
 add_custom_command(OUTPUT ${OUTPUT}
                    COMMAND ${PYTHON_EXECUTABLE} ${SETUP_PY} build
