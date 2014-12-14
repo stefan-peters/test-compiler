@@ -4,7 +4,8 @@
 /**
 * This is the base header with the interface for all
 * instrumentation code. This file must be not directly
-* included
+* included by the file to be instrumented. Instead its
+* the base for a custom implementation
 */
 
 #include <stdlib.h>

@@ -17,5 +17,8 @@
 #define COVERAGE_BRANCH(condition, N1, N2) \
 (condition) ? (COVERAGE_INC(N1), 1) : (COVERAGE_INC(N2), 0)
 
+// this is done by the instrumenter to make it possible to
+// have conditions with a comma inside it
+#define COVERAGE_COMMA ,
 
 #endif

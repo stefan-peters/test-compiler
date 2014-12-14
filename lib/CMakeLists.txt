@@ -12,7 +12,7 @@ include_directories (
     ${CLANG_INCLUDE_DIRS}
 )
 
-add_library(${CMAKE_PROJECT_NAME} SHARED ${LIB_SOURCES}) 
+add_library(${CMAKE_PROJECT_NAME} SHARED ${LIB_SOURCES})
 
 target_link_libraries(${CMAKE_PROJECT_NAME}
 	${LLVM_LDFLAGS}
@@ -23,17 +23,19 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
 )
 
 
-set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES 
+set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
 	SOVERSION ${VERSION}
     VERSION ${VERSION}
 )
+
+add_library(coverage_default STATIC "src/instrument/default.c")
 
 #
 # TESTS
 #
 
 if(BUILD_TESTS)
-	
+
 	include(UseGoogleMock)
 
 	include_directories(${GMOCK_INCLUDE_DIRS})

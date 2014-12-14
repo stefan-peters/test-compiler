@@ -1,34 +1,8 @@
 #include <coverage/instrument/default.h>
-
-#include <stdio.h>
-
-typedef struct coverage_data_struct {
-    coverage_buffer_t* buffer;
-    struct coverage_data_struct* previous;
-} coverage_data_t;
-
-coverage_data_t* coverage_last_node = 0;
-
-void coverage_buffer_register(coverage_buffer_t* buffer) {
-
-    coverage_data_t* node = (coverage_data_t*) malloc(sizeof(coverage_data_t));
-
-    node->buffer = buffer;
-    node->previous = coverage_last_node;
-    coverage_last_node = node;
-}
-
-void coverage_file_iterate(coverage_buffer_callback callback) {
-    coverage_data_t* node = coverage_last_node;
-
-    while(node) {
-        callback(node->buffer);
-        node = node->previous;
-    }
-}
+#include <coverage/instrument/impl/registry.h>
 
 const char* coverage_serialize_buffer(coverage_buffer_t* buffer) {
-    static char string[1024] = {0}; // this is bad!
+    static char string[1024] = {0}; // @TODO this is bad! change it!
 
     int node = 0;
     int index = 0;

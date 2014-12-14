@@ -1,21 +1,17 @@
-extern char _cov_register(const char* id, int* data, unsigned int size);
+#include "coverage.h"
 
-static int _cov[7] = {0};
-static const char* _cov_id = "0e8a0d28";
-static char _cov_is_registered = _cov_register(_cov_id, _cov, 7);
-
-#include <stdlib.h>
-#include <stdio.h>
+COVERAGE_CREATE_BUFFER("0e8a0d28", 4);
+coverage_node* _coverage_data = 0;
 
 int main() {
 
     printf("running\n");
 
-    if((true) ? (++_cov[4], true) : (++_cov[5], false)) {
+    if(COVERAGE_BRANCH(true, 2, 3)) {
         return 0;
     }
     else {
-        if((false) ? (++_cov[2], true) : (++_cov[3], false)) {
+        if(COVERAGE_BRANCH(false, 0, 1)) {
             return 2;
         }
     }
@@ -23,25 +19,30 @@ int main() {
     return 1;
 }
 
+// while( (cond) ? ++[X], true : ++[X], false)
+// if - else
+// for(;;)
+// do while
+// :? ConditionOperator
 
-struct _cov_entry {
-    const char* id;
-    int* data;
-    unsigned int size;
-};
+// break
+// continue
+// return
+// goto
+// throw
 
-// array pro DATEI!
+// for(e:c) for range
+// compound statement
 
-void _cov_at_exit() {
+// label
+// catch
+// switch
+// case
+// default
 
-}
+// and or && ||
 
-
-char _cov_register(const char* id, int* data, unsigned int size) {
-    static int is_registered = 0;
-    if((! is_registered) ? (++_cov[0], true) : (++_cov[1], false)) {
-        is_registered = 1;
-        atexit(_cov_at_exit);
-    }
-    return 1;
-}
+// function
+// statement
+// branch
+// condition
