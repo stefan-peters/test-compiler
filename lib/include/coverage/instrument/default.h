@@ -3,6 +3,10 @@
 
 #include <coverage/instrument/base.h>
 
+#if __cplusplus
+extern "C" {
+#endif
+
 typedef unsigned int coverage_counter_t;
 
 struct coverage_buffer_struct {
@@ -11,6 +15,10 @@ struct coverage_buffer_struct {
     coverage_counter_t* nodes;
     unsigned int length;
 };
+
+#ifdef __cplusplus
+} // extern C
+#endif
 
 // creates the per-file coverage buffer
 #define COVERAGE_CREATE_BUFFER(IDENTIFIER, SIZE) \

@@ -11,9 +11,13 @@
 
 #include <stdio.h>
 
-typedef struct coverage_data_struct {
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+typedef struct coverage_data_t {
     coverage_buffer_t* buffer;
-    struct coverage_data_struct* previous;
+    struct coverage_data_t* previous;
 } coverage_data_t;
 
 coverage_data_t* coverage_last_node = 0;
@@ -35,5 +39,9 @@ void coverage_file_iterate(coverage_buffer_callback callback) {
         node = node->previous;
     }
 }
+
+#ifdef __cplusplus
+} // extern C
+#endif
 
 #endif

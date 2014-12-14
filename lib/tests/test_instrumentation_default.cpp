@@ -7,7 +7,7 @@ COVERAGE_CREATE_BUFFER("123456", 5);
 
 coverage_buffer_struct* data;
 
-void coverage_buffer_register(coverage_buffer_struct* buffer) {
+void coverage_buffer_register(coverage_buffer_t* buffer) {
     data = buffer;
 }
 
@@ -34,5 +34,5 @@ TEST(base_tests, test_branch_increment) {
 
     COVERAGE_BRANCH(false, 2, 3);
     ASSERT_EQ(COVERAGE(2), 1);
-    ASSERT_EQ(COVERAGE(3), 1);    
+    ASSERT_EQ(COVERAGE(3), 1);
 }

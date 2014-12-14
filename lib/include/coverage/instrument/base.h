@@ -10,6 +10,10 @@
 
 #include <stdlib.h>
 
+#if __cplusplus
+extern "C" {
+#endif
+
 struct coverage_buffer_struct;
 typedef struct coverage_buffer_struct coverage_buffer_t;
 
@@ -19,6 +23,10 @@ void coverage_buffer_register(coverage_buffer_t*);
 const char* coverage_serialize_buffer(coverage_buffer_t*);
 
 void coverage_file_iterate(coverage_buffer_callback);
+
+#ifdef __cplusplus
+} // extern C
+#endif
 
 #define COVERAGE_INIT_FUNCTION __attribute__((constructor))
 #define COVERAGE_EXIT_FUNCTION __attribute__((destructor))

@@ -27,9 +27,8 @@ COVERAGE_EXIT_FUNCTION
 void coverage_exit_handler() {
 
     coverage_file = fopen("coverage.dat", "a");
-
     coverage_file_iterate(coverage_write_to_file);
-
     fclose(coverage_file);
+    
     coverage_file = 0;
 }
