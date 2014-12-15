@@ -6,7 +6,7 @@
 #include <coverage/instrument/default.h>
 #include <coverage/instrument/impl/registry.h>
 
-const char* coverage_default_file_path = "coverage.dat";
+const char* coverage_file_default_path = "coverage.dat";
 const char* coverage_file_path_environment_variable = "COVERAGE_FILE_PATH";
 
 const char* coverage_serialize_buffer(coverage_buffer_t* buffer) {
@@ -24,32 +24,32 @@ const char* coverage_serialize_buffer(coverage_buffer_t* buffer) {
     return string;
 }
 
-static FILE* c_file = 0;
-static unsigned int c_timestamp = 0;
+static FILE* coverage_file_fp = 0;
+static unsigned int coverage_file_timestamp = 0;
 
 static void coverage_write_buffer_to_file(coverage_buffer_t* buffer) {
-    fprintf(c_file, "%u,%s\n", c_timestamp, coverage_serialize_buffer(buffer));
+    fprintf(coverage_file_fp, "%u,%s\n", coverage_file_timestamp, coverage_serialize_buffer(buffer));
 }
 
 
 COVERAGE_EXIT_FUNCTION
-void coverage_write_coverage_to_file() {
+void coverage_file_write_coverage() {
 
     const char* path = getenv(coverage_file_path_environment_variable);
     if(! path) {
-        path = coverage_default_file_path;
+        path = coverage_file_default_path;
     }
 
-    c_timestamp = (unsigned int) time(NULL);
+    coverage_file_timestamp = (unsigned int) time(NULL);
 
-    c_file = fopen(path, "a");
-    if(! c_file) {
+    coverage_file_fp = fopen(path, "a");
+    if(! coverage_file_fp) {
         fprintf(stderr, "COVERAGE: could not append data to %s: %s", path, strerror(errno));
         return;
     }
 
     coverage_file_iterate(coverage_write_buffer_to_file);
-    fclose(c_file);
+    fclose(coverage_file_fp);
 
-    c_file = 0;
+    coverage_file_fp = 0;
 }

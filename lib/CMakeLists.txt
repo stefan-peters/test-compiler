@@ -28,7 +28,9 @@ set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
     VERSION ${VERSION}
 )
 
-add_library(coverage_default STATIC "src/instrument/default.c")
+add_library(coverage_cnt_file STATIC "src/instrument/default.c")
+# just demo. needs a real implementation
+add_library(coverage_hit_file STATIC "src/instrument/default.c")
 
 #
 # TESTS
@@ -58,6 +60,6 @@ if(BUILD_TESTS)
     add_gmock_test("default_instrumentation" "${sources}" "")
 
     set(sources "tests/test_instrumentation_file.cpp" "tests/data/data1.cpp")
-    add_gmock_test("write_to_coverage_to_file" "${sources}" coverage_default)
+    add_gmock_test("write_to_coverage_to_file" "${sources}" coverage_cnt_file)
 
 endif()
