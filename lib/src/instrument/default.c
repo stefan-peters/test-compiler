@@ -6,6 +6,9 @@
 #include <coverage/instrument/default.h>
 #include <coverage/instrument/impl/registry.h>
 
+const char* coverage_default_file_path = "coverage.dat";
+const char* coverage_file_path_environment_variable = "COVERAGE_FILE_PATH";
+
 const char* coverage_serialize_buffer(coverage_buffer_t* buffer) {
     static char string[1024] = {0}; // @TODO this is bad! change it!
 
@@ -30,11 +33,11 @@ static void coverage_write_buffer_to_file(coverage_buffer_t* buffer) {
 
 
 COVERAGE_EXIT_FUNCTION
-static void coverage_write_coverage_to_file() {
+void coverage_write_coverage_to_file() {
 
-    const char* path = getenv("COVERAGE_FILE_PATH");
+    const char* path = getenv(coverage_file_path_environment_variable);
     if(! path) {
-        path = "coverage.dat";
+        path = coverage_default_file_path;
     }
 
     c_timestamp = (unsigned int) time(NULL);

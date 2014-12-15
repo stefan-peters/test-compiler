@@ -41,10 +41,11 @@ if(BUILD_TESTS)
 	include_directories(${GMOCK_INCLUDE_DIRS})
 	link_directories(${GMOCK_LIBRARY_DIRS})
 
-	macro(add_gmock_test source libraries)
+	macro(add_gmock_test test_name sources libraries)
 
-	  	GET_FILENAME_COMPONENT(test_name ${source} NAME)
-	  	add_executable(${test_name} ${source} "tests/main.cpp")
+        set(sources ${sources}"tests/main.cpp")
+
+	  	add_executable(${test_name} ${sources})
 		add_dependencies(${test_name} GMockExternal ${CMAKE_PROJECT_NAME})
 
 		target_link_libraries(${test_name} ${libraries} ${GMOCK_LIBS})
@@ -53,7 +54,10 @@ if(BUILD_TESTS)
 
     # ${CMAKE_PROJECT_NAME} this are the llvm libs
 
-    add_gmock_test("tests/test_instrumentation_default.cpp" "")
-    add_gmock_test("tests/test_instrumentation_file.cpp" "/Users/ghost/Documents/test-compiler/b/lib/libcoverage_default.a")
+    set(sources "tests/test_instrumentation_default.cpp")
+    add_gmock_test("default_instrumentation" "${sources}" "")
+
+    set(sources "tests/test_instrumentation_file.cpp" "tests/data/data1.cpp")
+    add_gmock_test("write_to_coverage_to_file" "${sources}" coverage_default)
 
 endif()
