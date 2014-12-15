@@ -1,3 +1,8 @@
+#include <sys/time.h>
+#include <stdio.h>
+#include <errno.h>
+#include <string.h>
+
 #include <coverage/instrument/default.h>
 #include <coverage/instrument/impl/registry.h>
 
@@ -16,19 +21,32 @@ const char* coverage_serialize_buffer(coverage_buffer_t* buffer) {
     return string;
 }
 
-FILE* coverage_file = 0;
+static FILE* c_file = 0;
+static unsigned int c_timestamp = 0;
 
-void coverage_write_to_file(coverage_buffer_t* buffer) {
-    fprintf(coverage_file, "%s", coverage_serialize_buffer(buffer));
+static void coverage_write_buffer_to_file(coverage_buffer_t* buffer) {
+    fprintf(c_file, "%u,%s\n", c_timestamp, coverage_serialize_buffer(buffer));
 }
 
 
 COVERAGE_EXIT_FUNCTION
-void coverage_exit_handler() {
+static void coverage_write_coverage_to_file() {
 
-    coverage_file = fopen("coverage.dat", "a");
-    coverage_file_iterate(coverage_write_to_file);
-    fclose(coverage_file);
-    
-    coverage_file = 0;
+    const char* path = getenv("COVERAGE_FILE_PATH");
+    if(! path) {
+        path = "coverage.dat";
+    }
+
+    c_timestamp = (unsigned int) time(NULL);
+
+    c_file = fopen(path, "a");
+    if(! c_file) {
+        fprintf(stderr, "COVERAGE: could not append data to %s: %s", path, strerror(errno));
+        return;
+    }
+
+    coverage_file_iterate(coverage_write_buffer_to_file);
+    fclose(c_file);
+
+    c_file = 0;
 }
