@@ -25,7 +25,7 @@ const char* coverage_serialize_buffer(coverage_buffer_t* buffer) {
 }
 
 static FILE* coverage_file_fp = 0;
-static unsigned int coverage_file_timestamp = 0;
+unsigned int coverage_file_timestamp = 0;
 
 static void coverage_write_buffer_to_file(coverage_buffer_t* buffer) {
     fprintf(coverage_file_fp, "%u,%s\n", coverage_file_timestamp, coverage_serialize_buffer(buffer));

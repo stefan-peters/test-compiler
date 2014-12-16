@@ -12,6 +12,7 @@ void coverage_file_write_coverage();
 
 extern const char* coverage_file_default_path;
 extern const char* coverage_file_path_environment_variable;
+extern unsigned int coverage_file_timestamp;
 
 }
 
@@ -61,11 +62,19 @@ TEST(cnt_file_tests, test_counting) {
     char line[128];
     int lines = 0;
 
+    char coverage_1[128];
+    sprintf(coverage_1, "%u,data1.cpp,2,0,0,2\n", coverage_file_timestamp);
+
+    char coverage_2[128];
+    sprintf(coverage_2, "%u,write_file_test,0,1,0,0,0\n", coverage_file_timestamp);
+
     while(fgets(line, sizeof(line), file)) {
         ++lines;
+        ASSERT_TRUE(
+            strcmp(line, coverage_1) == 0 or
+            strcmp(line, coverage_2) == 0
+        );
     }
 
     ASSERT_EQ(lines, 2);
-    //2: 1418643534,data1.cpp,2,0,0,2
-    //2: 1418643534,write_file_test,0,1,0,0,0
 }
