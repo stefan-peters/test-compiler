@@ -11,11 +11,13 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/modules")
 
 project(coverage)
 
+set(CMAKE_CXX_STANDARD 11)
+#
  if(APPLE)
     set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
-    # use the port libs instead of mixing python interpreter,libs and crash at the end
-    set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} /opt/local/lib)
-    cmake_policy(SET CMP0042 NEW) #todo is this correct?
+#     # use the port libs instead of mixing python interpreter,libs and crash at the end
+#     set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} /opt/local/lib)
+#     cmake_policy(SET CMP0042 NEW) #todo is this correct?
 else()
     set(CMAKE_CXX_FLAGS "-std=c++11")
 endif()
@@ -23,7 +25,7 @@ endif()
 find_package(LLVM REQUIRED)
 find_package(Clang REQUIRED)
 
-set(REQUIRED_PYTHON_VERSION 2.7)
+set(REQUIRED_PYTHON_VERSION 2.7.8)
 
 find_package(PythonLibs ${REQUIRED_PYTHON_VERSION} REQUIRED)
 find_package(PythonInterp ${PYTHONLIBS_VERSION_STRING} REQUIRED)
@@ -44,4 +46,4 @@ if(BUILD_TESTS)
 endif()
 
 add_subdirectory(lib)
-add_subdirectory(bindings)
+# add_subdirectory(bindings)
